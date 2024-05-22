@@ -15,9 +15,9 @@ import Navbarheader from "../Homepage/Navbarheader";
 
 
 export default function Detail() {
-  const [selectedTab, setSelectedTab] = useState('Chapters');
   const { id } = useParams();
   const book = bookData.find((book) => book.id === parseInt(id, 10));
+  const [selectedTab, setSelectedTab] = useState('Chapters');
 
   const handleItemClick = (itemName) => {
     setSelectedTab(itemName);

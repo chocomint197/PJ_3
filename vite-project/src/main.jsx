@@ -10,6 +10,12 @@ import Homepage from './Components/Homepage/Homepage.jsx';
 import Detail from './Components/Detail/Detail.jsx';
 import Login from './Components/Users/Login.jsx';
 import Register from './Components/Users/Register.jsx';
+import Profile from './Components/Users/Profile.jsx';
+import Profileuploads from './Components/Users/Profileuploads.jsx';
+import Groups from './Components/Group/Group nav/Groups.jsx';
+import Groupprofile from './Components/Group/Group profile/Groupprofile.jsx';
+import Grouptitle from './Components/Group/Group profile/Grouptitle.jsx';
+import Groupmembers from './Components/Group/Group profile/Groupmembers.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,6 +32,30 @@ const router = createBrowserRouter([
   {
     path: "/user/register",
     element: <Register/>
+  },
+  {
+    path: "/user/profile",
+    element: <Profile/>
+  },
+  {
+    path:'/user/profileuploads',
+    element:<Profileuploads/>
+  },
+  {
+    path:'/groups',
+    element: <Groups/>
+  },
+  {
+    path:'/group/profile',
+    element: <Groupprofile/>
+  },
+  {
+    path: '/group/titles',
+    element: <Grouptitle/>
+  },
+  {
+    path: '/group/members',
+    element: <Groupmembers/>
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

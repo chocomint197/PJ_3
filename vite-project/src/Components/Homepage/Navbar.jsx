@@ -73,11 +73,6 @@ export default function Navbar() {
                     <div className="mx-2">Library</div>
                 </div>
             </NavLink>
-            <NavLink to={"/my/lists"} className="flex-shrink-0">
-            <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'MDList' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('MDList')}>
-                    <div className="mx-2">MDList</div>
-                </div>
-            </NavLink>
             <NavLink to={"/my/groups"} className="flex-shrink-0">
             <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'My Groups' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('My Groups')}>
                     <div className="mx-2">My Groups</div>
