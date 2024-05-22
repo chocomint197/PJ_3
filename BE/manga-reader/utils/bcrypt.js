@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt'
 const bcryptHashing = {
     hashingPassword: (password) => {
         const salt = bcrypt.genSaltSync(10);
@@ -13,4 +13,4 @@ const bcryptHashing = {
         return hashingPassword === hashPassword;
     }
 };
-export default bcryptHashing;
+export default bcryptHashing;   
