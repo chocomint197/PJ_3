@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     },
     salt: String,
     password: String,
-    avatar: String,
+    // avatar: String,
    
 }, {
     timestamps: true

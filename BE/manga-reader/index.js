@@ -11,10 +11,8 @@ app.use(express.json());
 connectDatabase();
 
 app.use('/api', RootRouter);
-app.get('', (req, res) => {
-    res.send('Hello mindx-er!');
-});
 
-app.listen(POST, () => {
-    console.log('Server is running!');
+
+app.listen(POST, () => { 
+    console.log(`Server is running on port ${POST}!`);
 });

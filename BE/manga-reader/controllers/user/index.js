@@ -5,7 +5,7 @@ import { generateToken } from "../../utils/token.js";
 const userController = {
     signUp: async (req, res) => {
         try {
-            const { email, password, userName } = req.body;
+            const { email, password, confirmPassword, userName } = req.body;
             const existedEmail = await UserModel.findOne({
                 email
             });
@@ -13,8 +13,9 @@ const userController = {
             const existedUserName = await UserModel.findOne({
                 userName
             })
+
             if(existedUserName) throw new Error ('Username đã tồn tại')
-                
+            if (password !== confirmPassword) throw new Error('Mật khẩu không trùng khớp')
             const hash = bcryptHashing.hashingPassword(password);
             const newUser = await UserModel.create({
                 email,
@@ -38,10 +39,16 @@ const userController = {
     },
     signIn: async (req, res) => {
         try {
-            const { email, password } = req.body;
-            const currentUser = await UserModel.findOne({
-                email,
-            });
+            const { emailOrUsername , password } = req.body;
+            const isEmail = /\S+@\S+\.\S+/.test(emailOrUsername);
+
+            let currentUser;
+            if (isEmail) {
+                currentUser = await UserModel.findOne({ email: emailOrUsername });
+            } else {
+                currentUser = await UserModel.findOne({ username: emailOrUsername });
+            }
+
             if (!currentUser) throw new Error('Sai tài khoản hoặc mật khẩu!');
             const checkPassword = bcryptHashing.verifyPassword(password, currentUser.password, currentUser.salt);
             if (!checkPassword) throw new Error('Sai tài khoản hoặc mật khẩu!');
