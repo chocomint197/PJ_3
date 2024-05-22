@@ -1,0 +1,46 @@
+
+.drawer {
+    margin-left: 0px;
+    transition: margin-left 150ms ease-in-out 0.5s;
+    height: auto;
+    position: static;
+    background-color: rgb(44 44 44);
+    box-shadow: inset -25px 0 9px -25px #0000001a;
+    flex-grow: 1;
+    flex-shrink: 0;
+    max-width: 256px;
+    min-width: 256px;
+    width: 256px;
+}
+
+
+.list__item {
+    align-items: center;
+    border-radius: 4px;
+    display:flex;
+    font-size: .875rem;
+    height: 1.75rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.font-bold {
+    font-weight: 700 !important;
+}
+
+.menu__item--active {
+    background-color: rgb(230 97 62);
+    color: #fff;
+}
+
+
+
+.menu__item--hover-hightlight:hover {
+    background-color: rgb(61 61 61)
+}
+
+.mx-2 {
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
+
