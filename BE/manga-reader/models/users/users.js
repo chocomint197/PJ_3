@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Collections from '../../database/collections.js';
+import Collections from '../../database/collection.js';
 
 const userSchema = new mongoose.Schema({
     userName: {
