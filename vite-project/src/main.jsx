@@ -16,6 +16,7 @@ import Groups from './Components/Group/Group nav/Groups.jsx';
 import Groupprofile from './Components/Group/Group profile/Groupprofile.jsx';
 import Grouptitle from './Components/Group/Group profile/Grouptitle.jsx';
 import Groupmembers from './Components/Group/Group profile/Groupmembers.jsx';
+import Uploadmanga from './Components/Upload/Uploadmanga.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: '/group/members',
     element: <Groupmembers/>
+  },
+  {
+    path: '/create/title',
+    element: <Uploadmanga/>
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { NavLink } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import "../styles/Navbar.css";
 import { IoHomeOutline, IoBookOutline  } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa";
@@ -7,10 +7,28 @@ import { SlPeople } from "react-icons/sl";
 import { MdOutlineStickyNote2 } from "react-icons/md";
 import "../../App.css"
 export default function Navbar() {
-  const [selectedSection, secSelectedSection] = useState('Home');
-  const handleItemClick = (itemName) => {
-    secSelectedSection(itemName);
-  };
+  const [selectedSection, setSelectedSection] = useState('Home');
+  const location = useLocation();
+
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    if (path === "/") setSelectedSection('Home');
+    else if (path.startsWith("/titles/feed")) setSelectedSection('Update');
+    else if (path.startsWith("/titles/follows")) setSelectedSection('Library');
+    else if (path.startsWith("/my/groups")) setSelectedSection('My Groups');
+    else if (path.startsWith("/my/history")) setSelectedSection('Reading History');
+    else if (path.startsWith("/titles")) setSelectedSection('Advenced Search');
+    else if (path.startsWith("/titles/recent")) setSelectedSection('Recently Added');
+    else if (path.startsWith("/titles/latest")) setSelectedSection('Latest Update');
+    else if (path.startsWith("/titles/random")) setSelectedSection('Random');
+    else if (path.startsWith("/groups")) setSelectedSection('Groups');
+    else if (path.startsWith("/users")) setSelectedSection('Users');
+    else if (path.startsWith("/rules")) setSelectedSection('Site Rules');
+    else if (path.startsWith("/announcements")) setSelectedSection('Announcements');
+  }, [location]);
+
   return (
     <div className="flex  bg-accent flex-col z-auto">
       <div className="drawer" style={{marginLeft: "0px", transition:"margin-left 150ms ease-in-out 0s"}}>
