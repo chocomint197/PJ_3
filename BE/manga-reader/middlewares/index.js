@@ -15,6 +15,7 @@ const middlewares = {
             }
             if (!password) throw new Error('Thiếu password!');
             if (!userName) throw new Error('Thiếu userName!');
+            
             next();
         } catch (error) {
             res.status(403).send({

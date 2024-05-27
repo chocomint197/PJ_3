@@ -5,6 +5,8 @@ import Navbar from "../Homepage/Navbar";
 import Navbarheader from "../Homepage/Navbarheader";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
+import { RxCross2 } from "react-icons/rx";
+
 export default function Uploadmanga() {
   const [selectedButton, setSelectedSection] = useState("All");
   const [openMenu, setOpenMenu] = useState({});
@@ -63,7 +65,21 @@ export default function Uploadmanga() {
     };
   }, [openMenu]);
 
+  const [upload, setUpload] = useState(null);
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setUpload(URL.createObjectURL(file));
+    }
+  };
+  const handleResetUpload = () => {
+    if (upload) {
+      URL.revokeObjectURL(upload);
+      setUpload(null);
+      setFileInputKey(Date.now()); 
+    }
+  };
   return (
     <div className="flex flex-grow text-color">
       <Navbar />
@@ -439,23 +455,18 @@ export default function Uploadmanga() {
                           <div className="grid gap-3 grid-cols-7">
                             <div className="wrap flex-grow-0">
                               <div className="page-sizer">
-                                {/* for cover */}
-                                {/* <div className="page" style={{upload.img}}>
-                                            <div className="close">
-                                            <RxCross2 className="icon small text-white"/>
-
-                                            </div>
-
-                                            </div> */}
-                                <label
-                                  htmlFor="file"
-                                  className="page placeholder "
-                                >
-                                  <i className="icon text-icon-contrast text-undefined plus"></i>
-                                  <div className="text-center font-15">
-                                    Click or drag to add files
-                                  </div>
-                                </label>
+                              {upload ? (
+            <div className="page" style={{ backgroundImage: `url(${upload})`, backgroundSize: 'cover' }}>
+              <button className="close" onClick={handleResetUpload}>
+                <RxCross2 className="icon small text-white" />
+              </button>
+            </div>
+          ) : (
+            <label htmlFor="file" className="page placeholder">
+              <i className="icon text-icon-contrast text-undefined plus"></i>
+              <div className="text-center font-15">Click or drag to add files</div>
+            </label>
+          )}
                               </div>
                             </div>
                           </div>
@@ -466,6 +477,8 @@ export default function Uploadmanga() {
                             multiple
                             accept="image/jpeg,image/jpg,image/png,image/gif"
                             style={{ display: "none" }}
+                            onChange={handleFileUpload}
+
                           />
                         </div>
                       </div>

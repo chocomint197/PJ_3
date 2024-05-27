@@ -6,6 +6,7 @@ const userController = {
     signUp: async (req, res) => {
         try {
             const { email, password, confirmPassword, userName } = req.body;
+
             const existedEmail = await UserModel.findOne({
                 email
             });
@@ -29,6 +30,7 @@ const userController = {
                 success: true
             })
         } catch (error) {
+
             res.status(403).send({
                 data: null,
                 message: error.message,
@@ -88,6 +90,24 @@ const userController = {
             });
         }
     },
+    getAllUsers: async(req,res) => {
+        try {
+            const users = await UserModel.find();
+            res.status(200).json({
+                data: users,
+                message:'List users',
+                success: true
+            })
+        } catch (error) {
+            console.error("Error while fetching users:", error);
+            res.status(500).json({
+                data: null,
+                message: 'Đã xảy ra lỗi khi lấy danh sách người dùng',
+                success: false,
+                error: error.message
+            });
+        }
+    }
     // getUserInfo: async (req, res) => {
     //     try {
     //         const { id } = req.params;

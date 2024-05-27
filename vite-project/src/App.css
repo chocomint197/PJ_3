@@ -1996,3 +1996,19 @@ menu,ol,ul {
 .hover\:bg-accent-10:hover {
   background-color: rgb(var(--md-accent-10));
 }
+
+.page>.close {
+
+  align-items: center;
+    background-color: rgb(var(--md-accent-10));
+    border-radius: 9999px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 1.5rem;
+    justify-content: center;
+    position: absolute;
+    right: -.25rem;
+    top: -.25rem;
+    width: 1.5rem;
+}

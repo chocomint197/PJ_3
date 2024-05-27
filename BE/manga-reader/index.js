@@ -13,6 +13,6 @@ connectDatabase();
 app.use('/api', RootRouter);
 
 
-app.listen(POST, () => { 
-    console.log(`Server is running on port ${POST}!`);
+app.listen(1050, () => { 
+    console.log(`Server is running on port 1050`);
 });
