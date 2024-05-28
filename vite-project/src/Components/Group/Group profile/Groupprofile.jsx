@@ -23,7 +23,7 @@ export default function Groupprofile() {
       </div>
 
       <div className=" flex-grow" style={{ background: "rgb(25, 26, 28)" }}>
-        <div className="layout-container page has-gradient px-4">
+        <div className="layout-container page has-gradient px-4" style={{ height: 'auto', position: 'relative'}}>
           <div
             className="absolute top-0 left-0 w-full h-[640px] blur-xl filter-xl"
             style={{

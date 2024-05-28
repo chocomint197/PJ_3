@@ -1223,6 +1223,8 @@ h2 {
   --banner-height: 12.5rem;
   --banner-overlap: var(--top-margin);
   gap: 0.5rem;
+  display: grid !important;
+
 }
 
 .banner-container.banner-shade {

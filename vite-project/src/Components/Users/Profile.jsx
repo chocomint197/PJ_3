@@ -20,7 +20,7 @@ export default function Profile() {
         </div>
       
         <div className=" flex-grow" style={{background: 'rgb(25, 26, 28)'}}>
-            <div className="layout-container page has-gradient px-4">
+        <div className="layout-container page has-gradient px-4" style={{ height: 'auto', position: 'relative'}}>
                 <div className="absolute top-0 left-0 w-full h-[640px] blur-xl filter-xl" style={{background: `radial-gradient(circle at top, rgb(var(--md-background) / 0.8), rgb(var(--md-background)) 75%), no-repeat top 35% center / 100% url(https://mangadex.org/img/group-banner.png)`}}></div>
                 <div className="banner-container">
                     <div className="banner-image" style={{backgroundImage: 'url(https://mangadex.org/img/group-banner.png)', width: 'calc(100% - 256px)'}}></div>
