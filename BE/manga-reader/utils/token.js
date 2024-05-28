@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-
+import dotenv from 'dotenv'
+dotenv.config()
 const generateToken = (document, type) => {
     const getSecretKey = (type === 'AT' ? process.env.AT_SECRETKEY : process.env.RT_SECRETKEY);
     const getExp = (type === 'AT' ? 300 : 3600 * 24 * 7)

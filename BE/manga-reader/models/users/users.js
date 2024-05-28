@@ -14,8 +14,11 @@ const userSchema = new mongoose.Schema({
     },
     salt: String,
     password: String,
-    // avatar: String,
-   
+   group: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: Collections.GROUP,
+    default: null
+   }
 }, {
     timestamps: true
 });

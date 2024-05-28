@@ -28,10 +28,12 @@ const middlewares = {
     },
     validateSignIn: (req, res, next) => {
         try {
-            const { email, password } = req.body;
-            if (!email) throw new Error('Thiếu email!');
-            if (email) {
-                const formatEmail = String(email)
+            const { emailOrUsername , password } = req.body;
+            if (!emailOrUsername) throw new Error('Thiếu email hoặc username!');
+            const isEmail = /\S+@\S+\.\S+/.test(emailOrUsername);
+
+            if (isEmail) {
+                const formatEmail = String(emailOrUsername)
                     .toLowerCase()
                     .match(
                         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
