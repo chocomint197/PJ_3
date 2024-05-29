@@ -107,28 +107,28 @@ const userController = {
                 error: error.message
             });
         }
-    }
-    // getUserInfo: async (req, res) => {
-    //     try {
-    //         const { id } = req.params;
-    //         const currentUser = await UserModel.findById(id, {
-    //             password: 0,
-    //             salt: 0
-    //         });
-    //         res.status(200).send({
-    //             data: currentUser,
-    //             message: 'Thành công!',
-    //             success: true
-    //         })
-    //     } catch (error) {
-    //         res.status(401).send({
-    //             data: null,
-    //             message: error.message,
-    //             error,
-    //             success: false
-    //         });
-    //     }
-    // },
+    },
+    getUserInfo: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const currentUser = await UserModel.findById(id, {
+                password: 0,
+                salt: 0
+            });
+            res.status(200).send({
+                data: currentUser,
+                message: 'Thành công!',
+                success: true
+            })
+        } catch (error) {
+            res.status(401).send({
+                data: null,
+                message: error.message,
+                error,
+                success: false
+            });
+        }
+    },
     // findByIdAndUpdate: async (req, res) => {
     //     try {
     //         const { id } = req.params;

@@ -49,7 +49,8 @@ const mangaController = {
             findArtist.mangas.push(newManga._id);
             await findAuthor.save();
             await findArtist.save();
-
+            const user = await UserModel.findById(uploaderId);
+            await user.updateRoles();
             res.status(201).send({
                 data: newManga,
                 message: 'Manga upload success',
