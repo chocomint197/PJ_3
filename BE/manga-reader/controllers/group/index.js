@@ -1,3 +1,4 @@
+import Collections from "../../database/collection.js";
 import GroupModel from "../../models/group/group.js";
 import UserModel from "../../models/users/users.js";
 
@@ -45,20 +46,34 @@ const groupController = {
             const { id } = req.params;
             const group = await GroupModel.findById(id);
             if (!group) throw new Error('Group does not exist')
+                
                 const uploads = await GroupModel.aggregate([
                     { $match: { _id: group._id } },
                     { $unwind: "$uploadedItems" },
                     {
                         $lookup: {
-                            from: group.uploadedItems.itemType,
+                            from: "mangas", 
                             localField: "uploadedItems.item",
                             foreignField: "_id",
-                            as: "uploadedItemsData"
+                            as: "mangaData"
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "chapters",
+                            localField: "uploadedItems.item",
+                            foreignField: "_id",
+                            as: "chapterData"
                         }
                     },
                     { $unwind: "$uploadedItemsData" },
                     { $replaceRoot: { newRoot: "$uploadedItemsData" } }
                 ]);
+                res.status(200).send({
+                    data: uploads,
+                    message: 'Group uploads retrieved successfully',
+                    success: true
+                });
         } catch (error) {
             res.status(404).send({
                 data: null,

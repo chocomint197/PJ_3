@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 const generateToken = (document, type) => {
     const getSecretKey = (type === 'AT' ? process.env.AT_SECRETKEY : process.env.RT_SECRETKEY);
-    const getExp = (type === 'AT' ? 300 : 86400 )
+    const getExp = (type === 'AT' ? 86400 : 300 )
     const token = jwt.sign(document, getSecretKey, {
         expiresIn: getExp
     });

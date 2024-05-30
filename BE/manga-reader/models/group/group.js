@@ -30,15 +30,9 @@ const groupSchema = new mongoose.Schema({
             enum: [Collections.MANGAS, Collections.CHAPTERS]
         }
     }],
-    uploadedItemCount: {
-        type: Number,
-        default: 0
-    }
+
 })
-groupSchema.pre('save', function(next) {
-    this.uploadedItemCount = this.uploadedItems.length;
-    next();
-});
+
 
 
 const GroupModel = mongoose.model(Collections.GROUP, groupSchema);
