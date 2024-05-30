@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../../App.css'
 import '../Groupstyle.css'
 import { IoArrowBack } from "react-icons/io5";
@@ -7,7 +7,26 @@ import Navbar from '../../Homepage/Navbar'
 import Navbarheader from '../../Homepage/Navbarheader'
 import { FaSearch } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios'
 export default function Groups() {
+    const [groups, setGroups] = useState([]);
+
+  const fetchGroups = async () => {
+    try {
+      const response = await axios.get(
+        "https://pj-3-ug2p.onrender.com/api/v1/group/list"
+      );
+      console.log(response)
+      setGroups(response.data.groups)
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
   return (
     <div className="flex flex-grow text-color">
         <Navbar/>
@@ -37,13 +56,15 @@ export default function Groups() {
                         </form>
                     </div>
                     <div className="grid grid-cols-1 gap-2 group-card-list grid-cols-4">
-                        {/* map groups */}
-                        <NavLink to={'/group/profile'} className="group-card">
+                        {groups.map((group, index) => (
+                            <NavLink to={`/group/profile/${group._id}`} className="group-card" ley={index}>
                             <div className="group-head">
                                 <img src="https://mangadex.org/img/avatar.png" alt="group avatar" style={{width: '32px',height: '32px'}} className="group-avatar"/>
-                                <div className="line-clamp-1 break-all" style={{fontSize: '14px'}}>Group 1</div>
+                                <div className="line-clamp-1 break-all" style={{fontSize: '14px'}}>{group.groupName}</div>
                             </div>
                         </NavLink>
+                       ))}
+                        
                     </div>
                     {/* for nav arrow page */ }
                     <div className="flex justify-center flex-wrap gap-2 my-6">

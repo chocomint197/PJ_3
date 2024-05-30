@@ -5,6 +5,8 @@ import { FaRegUser } from 'react-icons/fa'
 import { CiSearch } from 'react-icons/ci'
 import { NavLink } from 'react-router-dom'
 export default function Navbarheader() {
+  const loginCheck = localStorage.getItem('token')
+  const id = localStorage.getItem('userInfo')
   return (
     <div className="navbar-wrap flex flex-col transparent header-hidden ma fixed top-0 right-0 max-w">
     <div className="navbar-main flex">
@@ -39,10 +41,17 @@ export default function Navbarheader() {
             className="ml-2 ml-4 cursor-pointer bg-accent rounded-full flex items-center justify-center"
             style={{ minWidth: "40px", minHeight: "40px" }}
           >
-            <NavLink to={'/user/login'}>           
-                 <FaRegUser className="icon icon-large" />
-            </NavLink>
+            {loginCheck ? (
+                <NavLink to={`/user/profile/${id}`}>
+                  <img src="https://mangadex.org/img/avatar.png" className="icon icon-large"/>
 
+                </NavLink>
+              ) : (
+                <NavLink to={'/user/login'}>
+                  <FaRegUser className="icon icon-large" />
+
+                </NavLink>
+              )}
           </div>
         </div>
       </div>

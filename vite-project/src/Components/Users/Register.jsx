@@ -3,14 +3,29 @@ import "./Usercontrol.css";
 import { NavLink } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom"
 
-export default function Login() {
+export default function Register() {
+  const navigate = useNavigate();
   const registerSchema = Yup.object().shape({
     userName: Yup.string().required('Username is required'), 
     password: Yup.string().required('Password is required'), 
     email: Yup.string().email('Invalid email').required('Email is required'),
-    passwordConfirm: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Confirm password is required'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Confirm password is required'),
+
   });
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post(`https://pj-3-ug2p.onrender.com/api/v1/users/signup`, values);
+      alert('Register success')
+      navigate('/user/login')
+    } catch (error) {
+      console.error('Error registering user:', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="login-pf-page register-page">
       <div id="kc-header" className="login-pf-page-header">
@@ -48,16 +63,12 @@ export default function Login() {
     initialValues={{
       userName: "",
       password: "",
-      passwordConfirm: "",
+      confirmPassword: "",
       email: "",
     }}
     validationSchema={registerSchema}
-    onSubmit={(values, { setSubmitting }) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-      }, 400);
-    }}
+    onSubmit={handleSubmit}
+
   >
     {({ isSubmitting }) => (
       <Form id="kc-register-form" className="form-horizontal">
@@ -108,7 +119,7 @@ export default function Login() {
         <div className="form-group">
           <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <label
-            htmlFor="passwordConfirm"
+            htmlFor="confirmPassword"
             className="pf-c-form__label pf-c-form__label-text"
           >
             Confirm password <span className="required">*</span>
@@ -118,11 +129,11 @@ export default function Login() {
           <Field
     type="password"
     tabIndex="2"
-    name="passwordConfirm"
-    id="passwordConfirm"
+    name="confirmPassword"
+    id="confirmPassword"
     className="pf-c-form-control"
   />
-  <ErrorMessage name="passwordConfirm" component="div" className="error-message" />
+  <ErrorMessage name="confirmPassword" component="div" className="error-message" />
           </div>
          
         

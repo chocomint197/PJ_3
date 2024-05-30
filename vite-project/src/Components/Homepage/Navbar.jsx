@@ -6,9 +6,11 @@ import { FaRegBookmark } from "react-icons/fa";
 import { SlPeople } from "react-icons/sl";
 import { MdOutlineStickyNote2 } from "react-icons/md";
 import "../../App.css"
+import { GoPlus } from "react-icons/go";
 export default function Navbar() {
   const [selectedSection, setSelectedSection] = useState('Home');
   const location = useLocation();
+  const loginCheck = localStorage.getItem('token')
 
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export default function Navbar() {
     else if (path.startsWith("/titles/latest")) setSelectedSection('Latest Update');
     else if (path.startsWith("/titles/random")) setSelectedSection('Random');
     else if (path.startsWith("/groups")) setSelectedSection('Groups');
-    else if (path.startsWith("/users")) setSelectedSection('Users');
+    else if (path.startsWith("/user/list")) setSelectedSection('Users');
     else if (path.startsWith("/rules")) setSelectedSection('Site Rules');
     else if (path.startsWith("/announcements")) setSelectedSection('Announcements');
   }, [location]);
@@ -103,12 +105,33 @@ export default function Navbar() {
             </NavLink>
           </div>
           <div id="title-section" className="px-4 pt-2 flex flex-col flex-shrink-0">
-          <div className="list__item">
-              <div>
-                <IoBookOutline   className="icon" />
+          {loginCheck ? (
+                <div className="list__item">
+            
+                <div>
+                  <IoBookOutline   className="icon" />
+                </div>
+                <div className="mx-2 font-bold" >Titles</div>
+                <NavLink to={'/create/title'} className="ml-auto">
+                    <div>
+                    <GoPlus className="feather feather-plus icon" />
+
+                    </div>
+                   </NavLink>
+
               </div>
-              <div className="mx-2 font-bold" >Titles</div>
-            </div>
+              ) : (
+                <div className="list__item">
+            
+                <div>
+                  <IoBookOutline   className="icon" />
+                </div>
+                <div className="mx-2 font-bold" >Titles</div>
+
+
+              </div>
+              )}
+         
             <NavLink to={"/titles"}  className="flex-shrink-0">
                 <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Advenced Search' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Advenced Search')}>
                     <div className="mx-2">Advenced Search</div>
@@ -137,12 +160,27 @@ export default function Navbar() {
               </div>
               <div className="mx-2 font-bold" >Community</div>
             </div>
-            <NavLink to={"/groups"}  className="flex-shrink-0">
+            {loginCheck ? (
+               <NavLink to={"/groups"}  className="flex-shrink-0">
+               <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Groups' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Groups')}>
+                   <div className="mx-2">Groups</div>
+                   <NavLink to={'/create/group'} className="ml-auto">
+                    <div>
+                    <GoPlus className="feather feather-plus icon" />
+
+                    </div>
+                   </NavLink>
+               </div>
+           </NavLink>
+              ) : (
+                <NavLink to={"/groups"}  className="flex-shrink-0">
                 <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Groups' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Groups')}>
                     <div className="mx-2">Groups</div>
                 </div>
             </NavLink>
-            <NavLink to={"/users"}  className="flex-shrink-0">
+              )}
+            
+            <NavLink to={"/user/list"}  className="flex-shrink-0">
                 <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Users' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Users')}>
                     <div className="mx-2">Users</div>
                 </div>

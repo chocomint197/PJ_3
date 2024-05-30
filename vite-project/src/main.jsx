@@ -17,6 +17,9 @@ import Groupprofile from './Components/Group/Group profile/Groupprofile.jsx';
 import Grouptitle from './Components/Group/Group profile/Grouptitle.jsx';
 import Groupmembers from './Components/Group/Group profile/Groupmembers.jsx';
 import Uploadmanga from './Components/Upload/Uploadmanga.jsx';
+import UserList from './Components/Users/UserList.jsx';
+import CreateGroup from './Components/Group/CreateGroup.jsx';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,11 +38,15 @@ const router = createBrowserRouter([
     element: <Register/>
   },
   {
-    path: "/user/profile",
+    path: "/user/profile/:id",
     element: <Profile/>
   },
   {
-    path:'/user/profileuploads',
+    path:'/user/list',
+    element: <UserList/>
+  },
+  {
+    path:'/user/profile/:id/uploads',
     element:<Profileuploads/>
   },
   {
@@ -47,16 +54,20 @@ const router = createBrowserRouter([
     element: <Groups/>
   },
   {
-    path:'/group/profile',
+    path:'/group/profile/:id',
     element: <Groupprofile/>
   },
   {
-    path: '/group/titles',
+    path: '/group/:id/titles',
     element: <Grouptitle/>
   },
   {
-    path: '/group/members',
+    path: '/group/:id/members',
     element: <Groupmembers/>
+  },
+  {
+    path: '/create/group',
+    element: <CreateGroup/>
   },
   {
     path: '/create/title',

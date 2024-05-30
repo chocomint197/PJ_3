@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../App.css";
 import Navbar from "../../Homepage/Navbar";
 import Navbarheader from "../../Homepage/Navbarheader";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { MdBlock, MdOutlineFileUpload } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { CiBookmark } from "react-icons/ci";
 import { FaRegClock, FaRegEye } from "react-icons/fa";
+import axios from 'axios'
 // import './Usercontrol.css'
 export default function Groupmembers() {
   const [selectedTab, setSelectedTab] = useState("Members");
@@ -14,6 +15,25 @@ export default function Groupmembers() {
   const handleItemClick = (itemName) => {
     setSelectedTab(itemName);
   };
+  const [groups, setGroups] = useState([]);
+  const { id } = useParams();
+
+
+  const fetchGroups = async () => {
+    try {
+      const response = await axios.get(
+        `https://pj-3-ug2p.onrender.com/api/v1/group/${id}`
+      );
+      console.log(response.data.group)
+      setGroups(response.data.group)
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
   return (
     <div className="flex flex-grow text-color">
       <Navbar />
@@ -65,14 +85,19 @@ export default function Groupmembers() {
           <div className="min-w-0 ml-2" style={{ gridArea: "content" }}>
             <div className="font-bold text-4xl mt-1  flex items-center relative z-[3]">
               {/* Replace with group.groupName later */}
-              <div className="break-all">Group 1 </div>
+              <div className="break-all">{groups.groupName} </div>
             </div>
             <div className="flex items-center gap-2 mb-6">
               <span className="tt-container">
                 <span className="trigger">
                   <span className="stats__container">
                     <MdOutlineFileUpload className="feather feather-upload icon small text-icon-contrast text-undefined" />
-                    <span>0</span>
+                    {groups && groups.uploadedItems && groups.uploadedItems.length > 0 ?  (
+                      <span>{groups.uploadedItems.length}</span>
+                    ) : (
+                      <span>0</span>
+                    )
+                    }
                   </span>
                 </span>
               </span>
@@ -80,7 +105,7 @@ export default function Groupmembers() {
             <div className="overflow-x-auto fill-width tabs mb-6">
               <div className="select__tabs">
                 <NavLink
-                  to={"/group/profile"}
+                  to={`/group/profile/${groups._id}/`}
                   className={`select__tab ${
                     selectedTab === "Info" ? "active" : ""
                   }`}
@@ -89,7 +114,7 @@ export default function Groupmembers() {
                   Info
                 </NavLink>
                 <NavLink
-                  to={"/group/titles"}
+                  to={`/group/${groups._id}/uploads`}
                   className={`select__tab ${
                     selectedTab === "Uploads" ? "active" : ""
                   }`}
@@ -98,7 +123,7 @@ export default function Groupmembers() {
                   Titles
                 </NavLink>
                 <NavLink
-                  to={"/group/members"}
+                  to={`/group/${groups._id}/members`}
                   className={`select__tab ${
                     selectedTab === "Uploads" ? "active" : ""
                   }`}
@@ -109,29 +134,40 @@ export default function Groupmembers() {
               </div>
             </div>
             <div className="relative">
-             {/* map group members and leader */}
+
+             {groups && groups.groupLeader && (
+
              <div className="mb-6">
+              
               <div className="font-bold mb-2">Group Leader</div>
-              <NavLink to={'/'} className="user-card">
+              <NavLink to={`/user/profile/${groups.groupLeader._id}`} className="user-card">
                 <div className="user-head">
                   <img src="https://mangadex.org/img/avatar.png" alt="Avatar" className="user-avatar" style={{width: '32px', height: '32px'}}/>
-                  <div className="line-clamp-1">User 1</div>
+                  <div className="line-clamp-1">{groups.groupLeader.userName}</div>
                 </div>
               </NavLink>
              </div>
+             )}
+             {groups && groups.groupMembers && (
+
              <div className="mb-6">
               <div className="font-bold mb-2">
                 Group Members
               </div>
-              <div className="grid gap-2">
-                <NavLink to={'/'} className="user-card">
+             
+              {groups.groupMembers.map((member, index) => (
+
+              <div className="grid gap-2" key={index}>
+                <NavLink to={`/user/profile/${member._id}`} className="user-card">
                   <div className="user-head">
                   <img src="https://mangadex.org/img/avatar.png" alt="Avatar" className="user-avatar" style={{width: '32px', height: '32px'}}/>
-                  <div className="line-clamp-1 break-all">User 1</div>
+                  <div className="line-clamp-1 break-all">{member.userName}</div>
                   </div>
                 </NavLink>
               </div>
+               ))}
              </div>
+             )}
             </div>
           </div>
         </div>

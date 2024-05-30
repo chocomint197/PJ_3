@@ -2014,3 +2014,34 @@ menu,ol,ul {
     top: -.25rem;
     width: 1.5rem;
 }
+
+.role-tag {
+  border-radius: .125rem;
+    flex-shrink: 0;
+    font-size: small;
+    overflow: hidden;
+    padding: .125rem .5rem;
+    white-space: nowrap;
+}
+
+.p-2 {
+  padding: .5rem;
+}
+
+.md-inputwrap .md-label {
+  height: 100%;
+    left: 0;
+    padding: 16px;
+    position: absolute;
+    top: 0;
+    transition: all .2s ease-out;
+    width: 100%;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.font-1rem {
+  font-size: 1rem;
+}

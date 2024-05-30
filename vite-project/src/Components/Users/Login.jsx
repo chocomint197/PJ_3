@@ -2,13 +2,34 @@ import React from "react";
 import "./Usercontrol.css";
 import { NavLink } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { useNavigate } from "react-router-dom"
 
+import * as Yup from "yup";
+import axios from 'axios'
 export default function Login() {
+  const navigate = useNavigate()
+
   const loginSchema = Yup.object().shape({
-    userName: Yup.string().required('Username is required'), 
+    emailOrUsername: Yup.string().required('Username or is required'), 
     password: Yup.string().required('Password is required'), 
   });
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post(`https://pj-3-ug2p.onrender.com/api/v1/users/signin`, values);
+      
+      localStorage.setItem('userInfo',  response.data.data._id);
+      localStorage.setItem('token', response.data.data.accessToken);
+      navigate('/')
+
+      alert('Login success')
+    } catch (error) {
+      console.error('Error login user:', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+ 
   return (
     <div className="login-pf-page">
       <div id="kc-header" className="login-pf-page-header">
@@ -31,35 +52,30 @@ export default function Login() {
               <div id="kc-form-wrapper">
               <Formik
     initialValues={{
-      userName: "",
+      emailOrUsername: "",
       password: "",
     }}
     validationSchema={loginSchema}
-    onSubmit={(values, { setSubmitting }) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-      }, 400);
-    }}
+    onSubmit={handleSubmit}
   >
     {({ isSubmitting }) => (
       <Form id="kc-form-login">
         <div className="form-group">
           <label
-            htmlFor="userName"
+            htmlFor="emailOrUsername"
             className="pf-c-form__label pf-c-form__label-text"
           >
-            Username or email
+            Username or email       
           </label>
           <Field
      tabIndex="1"
       type="text"
-     id="userName"
-      name="userName" 
+     id="emailOrUsername"
+      name="emailOrUsername" 
       className="pf-c-form-control"
      autoComplete="off"
   />
-    <ErrorMessage name="userName" component="div" className="error-message" />
+    <ErrorMessage name="emailOrUsername" component="div" className="error-message" />
 
         </div>
         <div className="form-group">

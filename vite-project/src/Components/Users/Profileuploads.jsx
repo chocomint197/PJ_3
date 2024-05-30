@@ -1,17 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../App.css";
 import Navbar from "../Homepage/Navbar";
 import Navbarheader from "../Homepage/Navbarheader";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { FaEye, FaRegClock, FaRegEye, FaRegUser } from "react-icons/fa";
 import { BiComment } from "react-icons/bi";
 import { MdGroup } from "react-icons/md";
+import axios from 'axios'
 export default function Profileuploads() {
   const [selectedTab, setSelectedTab] = useState("Uploads");
 
   const handleItemClick = (itemName) => {
     setSelectedTab(itemName);
   };
+  const [user, setUser] = useState(null);
+
+  const { id } = useParams();
+  const token = localStorage.getItem('token'); 
+
+  const axiosInstance = axios.create({
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+    useEffect(() => {
+      const fetchUserData = async () => {
+          try {
+              const response = await axiosInstance.get(`https://pj-3-ug2p.onrender.com/api/v1/users/profile/${id}`)
+              setUser(response.data)
+          } catch (error) {
+              console.log('Error fetching', error)
+          }
+      };
+      fetchUserData()
+    }, [id]);
   return (
     <div className="flex flex-grow text-color">
       <Navbar />
@@ -50,13 +72,17 @@ export default function Profileuploads() {
           <div className="relative" style={{ gridArea: "button" }}></div>
           <div className="min-w-0 ml-2" style={{ gridArea: "content" }}>
             <div className="font-bold text-4xl mt-2 mb-6 flex items-center relative z-[3]">
+              
               {/* Replace with user.userName later */}
-              <div className="break-all">User 1 </div>
+              {user && user.data && (
+              <div className="break-all">{user.data.userName} </div>
+               )}
             </div>
+               
             <div className="overflow-x-auto fill-width tabs mb-6">
               <div className="select__tabs">
                 <NavLink
-                  to={"/user/profile"}
+                  to={`/user/profile/${id}`}
                   className={`select__tab ${
                     selectedTab === "Info" ? "active" : ""
                   }`}
@@ -65,7 +91,7 @@ export default function Profileuploads() {
                   Info
                 </NavLink>
                 <NavLink
-                  to={"/user/profileuploads"}
+                  to={`/user/profile/${id}/uploads`}
                   className={`select__tab ${
                     selectedTab === "Uploads" ? "active" : ""
                   }`}
