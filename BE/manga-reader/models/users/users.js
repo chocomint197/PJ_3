@@ -21,31 +21,35 @@ const userSchema = new mongoose.Schema({
    },
    role: {
     type: [String],
-    default: ['member']
+    default: ['Member']
+   },
+   uploads: {
+    type: Number,
+    default: 0
    }
 }, {
     timestamps: true
 });
 userSchema.methods.updateRoles = async function() {
-    const roles = ['member']; 
+    const roles = ['Member']; 
 
     if (this.group) {
         const group = await mongoose.model(Collections.GROUP).findById(this.group);
         if (group) {
             if (group.groupLeader.equals(this._id)) {
-                roles.push('group leader');
+                roles.push('Group leader');
             } else {
-                roles.push('group member');
+                roles.push('Group member');
             }
         }
     }
 
-    const mangaCount = await mongoose.model(Collections.MANGAS).countDocuments({ uploader: this._id });
-    const chapterCount = await mongoose.model(Collections.CHAPTERS).countDocuments({ uploader: this._id });
+    // const mangaCount = await mongoose.model(Collections.MANGAS).countDocuments({ uploader: this._id });
+    // const chapterCount = await mongoose.model(Collections.CHAPTERS).countDocuments({ uploader: this._id });
 
-    if (mangaCount > 0 || chapterCount > 0) {
-        roles.push('uploader');
-    }
+    // if (mangaCount > 0 || chapterCount > 0) {
+    //     roles.push('Uploader');
+    // }
 
     this.role = roles;
     await this.save();

@@ -5,6 +5,6 @@ const Collections = {
     COMMENTS: 'comments',
     ARTIST: 'artist',
     AUTHOR: 'author',
-    GROUP: 'group'
+    GROUP: 'groups'
 }
 export default Collections;

@@ -50,6 +50,7 @@ const mangaController = {
             await findAuthor.save();
             await findArtist.save();
             const user = await UserModel.findById(uploaderId);
+            user.uploads +=1;
             await user.updateRoles();
             res.status(201).send({
                 data: newManga,
