@@ -23,6 +23,8 @@ const groupController = {
         try {
             const { id } = req.params;
             const group = await GroupModel.findById(id)
+            .populate('groupLeader')
+            .populate('groupMembers');
             if (!group) throw new Error ('Group does not exists')
                 res.status(201).send({
                     group,
@@ -121,10 +123,14 @@ const groupController = {
             
         } else {
             throw new Error('User not found');
-        }
+        }   
+        const populatedGroup =  await GroupModel.findById(newGroup._id)
+        .populate('groupLeader')
+        .populate('groupMembers')
+
 
             res.status(201).json({
-                group: newGroup,
+                group: populatedGroup,
                 message: 'Group created successfully',
                 success: true
             });
