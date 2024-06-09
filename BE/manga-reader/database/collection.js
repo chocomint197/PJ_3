@@ -3,8 +3,8 @@ const Collections = {
     MANGAS: 'mangas',
     CHAPTERS: 'chapters',
     COMMENTS: 'comments',
-    ARTIST: 'artist',
-    AUTHOR: 'author',
+    ARTIST: 'artists',
+    AUTHOR: 'authors',
     GROUP: 'groups'
 }
 export default Collections;

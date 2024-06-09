@@ -34,6 +34,20 @@ const mangaSchema = new mongoose.Schema({
         enum: tagsEnum.theme,
         required: true,
     },
+    contentRating: {
+        type: String,
+        enum: tagsEnum.contentRating,
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: tagsEnum.status,
+        required: true,
+    },
+    publicDate: {
+        type: Number,
+        required: true
+    },
     images: {
         type: [String],
         required: true,
@@ -42,7 +56,8 @@ const mangaSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: Collections.USERS,
         required: true,
-    }
+    },
+
 }, {
     timestamps: true
 });

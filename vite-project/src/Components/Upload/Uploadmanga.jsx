@@ -6,17 +6,37 @@ import Navbarheader from "../Homepage/Navbarheader";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
-
+import axios from "axios";
 export default function Uploadmanga() {
   const [selectedButton, setSelectedSection] = useState("All");
   const [openMenu, setOpenMenu] = useState({});
   const [selectedOptions, setSelectedOptions] = useState({});
   const guidelineRef = useRef(null);
+  const [tags, setTags] = useState({
+    format: [],
+    genre: [],
+    theme: [],
+    contentRating: [],
+    status: [],
+  });
   const scrollToGuideline = () => {
     if (guidelineRef.current) {
       guidelineRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:1050/api/v1/title/list/tags`
+        );
+        setTags(response.data.tagsEnum);
+      } catch (error) {
+        console.log("Error fetching", error);
+      }
+    };
+    fetchUserData();
+  }, []);
   const menus = [
     {
       name: "contentRating",
@@ -50,11 +70,11 @@ export default function Uploadmanga() {
 
   const handleClickOutside = (event) => {
     if (
-        !event.target.closest(".md-select-inner-wrap") &&
-        Object.keys(openMenu).length > 0
-      ) {
-        setOpenMenu({});
-      }
+      !event.target.closest(".md-select-inner-wrap") &&
+      Object.keys(openMenu).length > 0
+    ) {
+      setOpenMenu({});
+    }
   };
 
   useEffect(() => {
@@ -77,7 +97,7 @@ export default function Uploadmanga() {
     if (upload) {
       URL.revokeObjectURL(upload);
       setUpload(null);
-      setFileInputKey(Date.now()); 
+      setFileInputKey(Date.now());
     }
   };
   return (
@@ -172,7 +192,16 @@ export default function Uploadmanga() {
                       </span>
                     </div>
                     <div>
-                      <div className="input-container" style={{display: selectedButton === 'Titles' || selectedButton === 'All' ? " " : "none"}}>
+                      <div
+                        className="input-container"
+                        style={{
+                          display:
+                            selectedButton === "Titles" ||
+                            selectedButton === "All"
+                              ? " "
+                              : "none",
+                        }}
+                      >
                         <div className="label mt-6">
                           <div className="required">Title</div>
                         </div>
@@ -196,7 +225,15 @@ export default function Uploadmanga() {
                       </div>
                     </div>
                     <hr className="border-1 my-4 border-accent-20 my-6" />
-                    <div style={{display: selectedButton === 'Metadata' || selectedButton === 'All' ? " " : "none"}}>
+                    <div
+                      style={{
+                        display:
+                          selectedButton === "Metadata" ||
+                          selectedButton === "All"
+                            ? " "
+                            : "none",
+                      }}
+                    >
                       <div>
                         <div className="header required">Author</div>
                       </div>
@@ -211,13 +248,21 @@ export default function Uploadmanga() {
                               placeholder="Author name"
                               className="text-color"
                             />
-            
+
                             <div className="md-border"></div>
                           </form>
                         </div>
                       </div>
                     </div>
-                    <div style={{display: selectedButton === 'Metada' || selectedButton === 'All' ? " " : "none"}}>
+                    <div
+                      style={{
+                        display:
+                          selectedButton === "Metada" ||
+                          selectedButton === "All"
+                            ? " "
+                            : "none",
+                      }}
+                    >
                       <div className="header required">Artists</div>
                       <div>
                         <div className="relative">
@@ -238,7 +283,16 @@ export default function Uploadmanga() {
                     </div>
                     <hr className="border-1 my-4 border-accent-20 my-6" />
                     <div className="my-8">
-                      <div className="grid grid-cols-3 gap-8" style={{display: selectedButton === 'Metadata' || selectedButton === 'All' ? " " : "none"}}>
+                      <div
+                        className="grid grid-cols-3 gap-8"
+                        style={{
+                          display:
+                            selectedButton === "Metadata" ||
+                            selectedButton === "All"
+                              ? " "
+                              : "none",
+                        }}
+                      >
                         {menus.map((menu, index) => (
                           <div className="order-none" key={index}>
                             <div className="header-required no-top">
@@ -285,15 +339,17 @@ export default function Uploadmanga() {
                                 </div>
                               )}
                             </div>
+                            
                           </div>
                         ))}
-                    
+
                         <div className="order-none">
                           <div className="header no-top">Publication Year</div>
                           <div className="md-select focus:outline-none">
                             <div className="md-input">
                               <div className="md-inputwrap">
                                 <input
+                                  name="publicDate"
                                   type="number"
                                   className="placeholder-current p-4 text-color"
                                   placeholder="Publication Year"
@@ -305,140 +361,65 @@ export default function Uploadmanga() {
                           </div>
                         </div>
                       </div>
-                      <div style={{display: selectedButton === 'Tags' || selectedButton === 'All' ? " " : "none"}}>
+                      <div
+                        style={{
+                          display:
+                            selectedButton === "Tags" ||
+                            selectedButton === "All"
+                              ? " "
+                              : "none",
+                        }}
+                      >
                         <div className="header">Format</div>
                         <div className="mt-2">
                           <div className="flex flex-wrap gap-2">
-                            <span className="chip flex items-center">
-                              4-Koma
-                            </span>
-                            <span className="chip flex items-center">
-                              Adaption
-                            </span>
-                            <span className="chip flex items-center">
-                              Anthology
-                            </span>
-                            <span className="chip flex items-center">
-                              Award Winning
-                            </span>
-                            <span className="chip flex items-center">
-                              Doujinshi
-                            </span>
-                            <span className="chip flex items-center">
-                              Fan Colored
-                            </span>
-                            <span className="chip flex items-center">
-                              Full Color
-                            </span>
-                            <span className="chip flex items-center">
-                              Long Strip
-                            </span>
-                            <span className="chip flex items-center">
-                              Offical Colored
-                            </span>
-                            <span className="chip flex items-center">
-                              Oneshot
-                            </span>
-                            <span className="chip flex items-center">
-                              Self-Published
-                            </span>
-                            <span className="chip flex items-center">
-                              Web Comic
-                            </span>
+                            {tags.format.map((format, index) => (
+                              <span className="chip flex items-center" key={index}>
+                                {format}
+                              </span>
+                            ))}
+
+
                           </div>
                         </div>
                         <div className="header">Genre</div>
                         <div className="mt-2">
                           <div className="flex flex-wrap gap-2">
-                            <span className="chip flex items-center">
-                              Action
-                            </span>
-                            <span className="chip flex items-center">
-                              Adventure
-                            </span>
-                            <span className="chip flex items-center">
-                              Boy's Love
-                            </span>
-                            <span className="chip flex items-center">
-                              Comedy
-                            </span>
-                            <span className="chip flex items-center">
-                              Crime
-                            </span>
-                            <span className="chip flex items-center">
-                              Drama
-                            </span>
-                            <span className="chip flex items-center">
-                              Fantasy
-                            </span>
-                            <span className="chip flex items-center">
-                              Girl's Love
-                            </span>
-                            <span className="chip flex items-center">
-                              History
-                            </span>
-                            <span className="chip flex items-center">
-                              Horror
-                            </span>
-                            <span className="chip flex items-center">
-                              Isekai
-                            </span>
-                            <span className="chip flex items-center">
-                              Magical Girls
-                            </span>
-                            <span className="chip flex items-center">
-                              Mecha
-                            </span>
-                            <span className="chip flex items-center">
-                              Medical
-                            </span>
-                            <span className="chip flex items-center">
-                              Mystery
-                            </span>
-                            <span className="chip flex items-center">
-                              Philosophical
-                            </span>
-                            <span className="chip flex items-center">
-                              Psychological
-                            </span>
-                            <span className="chip flex items-center">
-                              Romance
-                            </span>
-                            <span className="chip flex items-center">
-                              Sci-fi
-                            </span>
-                            <span className="chip flex items-center">
-                              Slice of Life
-                            </span>
-                            <span className="chip flex items-center">
-                              Sports{" "}
-                            </span>
-                            <span className="chip flex items-center">
-                              Superhero
-                            </span>
-                            <span className="chip flex items-center">
-                              Thriller
-                            </span>
-                            <span className="chip flex items-center">
-                              Tragedy
-                            </span>
-                            <span className="chip flex items-center">
-                              Wuxia
-                            </span>
+                            {tags.genre.map((genre, index) => (
+                              <span
+                                className="chip flex items-center"
+                                key={index}
+                              >
+                                {genre}
+                              </span>
+                            ))}
                           </div>
                         </div>
                         <div className="header">Theme</div>
                         <div className="mt-2">
                           <div className="flex flex-wrap gap-2">
-                            <span className="chip flex items-center">
-                              Aliens
-                            </span>
+                            {tags.theme.map((theme, index) => (
+                              <span
+                                className="chip flex items-center"
+                                key={index}
+                              >
+                                {theme}
+                              </span>
+                            ))}
                           </div>
                         </div>
                       </div>
                     </div>
                     <hr className="border-1 my-4 border-accent-20 my-6" />
-                    <div style={{display: selectedButton === 'Covers' || selectedButton === 'All' ? " " : "none"}}> 
+                    <div
+                      style={{
+                        display:
+                          selectedButton === "Covers" ||
+                          selectedButton === "All"
+                            ? " "
+                            : "none",
+                      }}
+                    >
                       <div className="flex justify-center"></div>
                       <div className="input-container">
                         <div className="label mt-6">
@@ -455,18 +436,32 @@ export default function Uploadmanga() {
                           <div className="grid gap-3 grid-cols-7">
                             <div className="wrap flex-grow-0">
                               <div className="page-sizer">
-                              {upload ? (
-            <div className="page" style={{ backgroundImage: `url(${upload})`, backgroundSize: 'cover' }}>
-              <button className="close" onClick={handleResetUpload}>
-                <RxCross2 className="icon small text-white" />
-              </button>
-            </div>
-          ) : (
-            <label htmlFor="file" className="page placeholder">
-              <i className="icon text-icon-contrast text-undefined plus"></i>
-              <div className="text-center font-15">Click or drag to add files</div>
-            </label>
-          )}
+                                {upload ? (
+                                  <div
+                                    className="page"
+                                    style={{
+                                      backgroundImage: `url(${upload})`,
+                                      backgroundSize: "cover",
+                                    }}
+                                  >
+                                    <button
+                                      className="close"
+                                      onClick={handleResetUpload}
+                                    >
+                                      <RxCross2 className="icon small text-white" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <label
+                                    htmlFor="file"
+                                    className="page placeholder"
+                                  >
+                                    <i className="icon text-icon-contrast text-undefined plus"></i>
+                                    <div className="text-center font-15">
+                                      Click or drag to add files
+                                    </div>
+                                  </label>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -478,7 +473,6 @@ export default function Uploadmanga() {
                             accept="image/jpeg,image/jpg,image/png,image/gif"
                             style={{ display: "none" }}
                             onChange={handleFileUpload}
-
                           />
                         </div>
                       </div>
@@ -504,7 +498,11 @@ export default function Uploadmanga() {
                       </button>
                     </div>
                     <hr className="border-1 my-4 border-accent-20 my-6" />
-                    <div className="bg-background rounded" id="draft-guideline" ref={guidelineRef}>
+                    <div
+                      className="bg-background rounded"
+                      id="draft-guideline"
+                      ref={guidelineRef}
+                    >
                       <div className="flex text-xl px-6 py-4">
                         Manga Guidelines
                       </div>

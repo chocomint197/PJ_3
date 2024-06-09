@@ -78,7 +78,20 @@ const tagsEnum = {
         'Villainess',
         'Virtual Reality',
         'Zombies'
-    ]
+    ],
+    contentRating :[
+        'Safe',
+        'Suggestive',
+        'Erotica',
+        'Pornographic'
+    ],
+    status: [
+        'Ongoing',
+        'Completed',
+        'Hiatus',
+        'Cancelled'
+    ],
+
 }
 
 export default tagsEnum

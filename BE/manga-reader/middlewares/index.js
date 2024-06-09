@@ -1,5 +1,8 @@
 import { verifyToken } from "../utils/token.js";
+import multer from "multer";
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 const middlewares = {
     validateSignUp: (req, res, next) => {
         try {
@@ -120,6 +123,17 @@ const middlewares = {
                 success: false,
             });
         }
+    },
+    uploadImage: (req,res,next) => {
+        upload.single('images')(req,res ,(err) => {
+            if(err) {
+                return res.status(400).send({
+                    message:'Upload image failed',
+                    success: false,
+                });
+            }
+            next();
+        })
     }
 };
 

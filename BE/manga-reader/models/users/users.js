@@ -14,19 +14,27 @@ const userSchema = new mongoose.Schema({
     },
     salt: String,
     password: String,
-   group: {
+   group: [{
     type: mongoose.SchemaTypes.ObjectId,
     ref: Collections.GROUP,
     default: null
-   },
+   }],
    role: {
     type: [String],
     default: ['Member']
    },
-   uploads: {
-    type: Number,
-    default: 0
-   }
+   uploadedItems: [{
+    item: {
+        type:mongoose.Schema.Types.ObjectId,
+        required: true,
+        refPath: 'uploadedItems.itemType'
+    },
+    itemType: {
+        type: String,
+        required: true,
+        enum: [Collections.MANGAS, Collections.CHAPTERS]
+    }
+}],
 }, {
     timestamps: true
 });
@@ -51,8 +59,8 @@ userSchema.methods.updateRoles = async function() {
     //     roles.push('Uploader');
     // }
 
-    this.role = roles;
-    await this.save();
+    // this.role = roles;
+    // await this.save();
 };
 const UserModel = mongoose.model(Collections.USERS, userSchema);
 export default UserModel;

@@ -24,7 +24,6 @@ export default function Groupprofile() {
       const response = await axios.get(
         `https://pj-3-ug2p.onrender.com/api/v1/group/${id}`
       );
-      console.log(response)
       setGroups(response.data.group)
     } catch (error) {
       console.error("Error fetching groups:", error);
