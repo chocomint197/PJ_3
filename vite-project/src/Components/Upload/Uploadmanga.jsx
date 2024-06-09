@@ -25,7 +25,7 @@ export default function Uploadmanga() {
     }
   };
   useEffect(() => {
-    const fetchUserData = async () => {
+    const getListTags = async () => {
       try {
         const response = await axios.get(
           `http://localhost:1050/api/v1/title/list/tags`
@@ -35,7 +35,7 @@ export default function Uploadmanga() {
         console.log("Error fetching", error);
       }
     };
-    fetchUserData();
+    getListTags();
   }, []);
   const menus = [
     {
