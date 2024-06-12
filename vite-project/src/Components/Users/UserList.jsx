@@ -107,7 +107,7 @@ export default function UserList() {
                       </div>
                       <div className="ml-auto">
                         <div className="role-tag" style={{backgroundColor: 'rgb(250,250,250', color: 'rgb(0,0,0)'}}>
-                            {user.role}
+                            {user.role[0]}
                         </div>
                       </div>
                     </div>

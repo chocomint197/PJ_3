@@ -78,7 +78,6 @@ const axiosInstance = axios.create({
 
                             {user.data.role.map((role, index) => (
                           <div key={index} className="role-tag independent">
-                      <div className="role-dot"></div>
                             {role}
                       </div>
                               ))}

@@ -16,7 +16,7 @@ const upload = multer({ storage: storage });
 const mangaController = {
   createManga: async (req, res) => {
     try {
-      const { title, author, artist, format, genre, theme } = req.body;
+      const { title, author, artist, format, genre, theme,contentRating, status, publicDate } = req.body;
       const formatArr = JSON.parse(format)
       const genreArr = JSON.parse(genre)
       const themeArr = JSON.parse(theme)
@@ -69,8 +69,12 @@ const mangaController = {
         format: formatArr,
         genre: genreArr,
         theme: themeArr,
+        status: status,
+        contentRating: contentRating,
+        publicDate: publicDate,
         images: [uploadedImageUrl],
         uploader: uploaderId,
+
       });
    
       await newManga.save();

@@ -7,6 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
+
 export default function Uploadmanga() {
   const [selectedButton, setSelectedSection] = useState("All");
   const [openMenu, setOpenMenu] = useState({});
@@ -19,6 +20,11 @@ export default function Uploadmanga() {
     contentRating: [],
     status: [],
   });
+  const [selectedTags, setSelectedTags] = useState({
+    format: [],
+    genre: [],
+    theme: [],
+  });
   const scrollToGuideline = () => {
     if (guidelineRef.current) {
       guidelineRef.current.scrollIntoView({ behavior: "smooth" });
@@ -28,7 +34,7 @@ export default function Uploadmanga() {
     const getListTags = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1050/api/v1/title/list/tags`
+          `https://pj-3-ug2p.onrender.com/api/v1/title/list/tags`
         );
         setTags(response.data.tagsEnum);
       } catch (error) {
@@ -37,18 +43,6 @@ export default function Uploadmanga() {
     };
     getListTags();
   }, []);
-  const menus = [
-    {
-      name: "contentRating",
-      options: ["Safe", "Suggestive", "Erotica", "Pornographic"],
-      placeholder: "Select Rating",
-    },
-    {
-      name: "publicationStatus",
-      options: ["Ongoing", "Completed", "Hiatus", "Cancelled"],
-      placeholder: "Select Status",
-    },
-  ];
 
   const handleButtonClick = (itemName) => {
     setSelectedSection(itemName);
@@ -97,8 +91,24 @@ export default function Uploadmanga() {
     if (upload) {
       URL.revokeObjectURL(upload);
       setUpload(null);
-      setFileInputKey(Date.now());
     }
+  };
+
+  const handleTagClick = (category, tag) => {
+    setSelectedTags((prevTags) => {
+      const newSelectedTags = { ...prevTags };
+      const isTagSelected = newSelectedTags[category].includes(tag);
+
+      if (isTagSelected) {
+        newSelectedTags[category] = newSelectedTags[category].filter(
+          (selectedTag) => selectedTag !== tag
+        );
+      } else {
+        newSelectedTags[category] = [...newSelectedTags[category], tag];
+      }
+
+      return newSelectedTags;
+    });
   };
   return (
     <div className="flex flex-grow text-color">
@@ -248,7 +258,6 @@ export default function Uploadmanga() {
                               placeholder="Author name"
                               className="text-color"
                             />
-
                             <div className="md-border"></div>
                           </form>
                         </div>
@@ -257,7 +266,7 @@ export default function Uploadmanga() {
                     <div
                       style={{
                         display:
-                          selectedButton === "Metada" ||
+                          selectedButton === "Metadata" ||
                           selectedButton === "All"
                             ? " "
                             : "none",
@@ -275,7 +284,6 @@ export default function Uploadmanga() {
                               placeholder="Artist name"
                               className="text-color"
                             />
-
                             <div className="md-border"></div>
                           </form>
                         </div>
@@ -287,62 +295,113 @@ export default function Uploadmanga() {
                         className="grid grid-cols-3 gap-8"
                         style={{
                           display:
-                            selectedButton === "Metadata" ||
+                            selectedButton === "Tags" ||
                             selectedButton === "All"
                               ? " "
                               : "none",
                         }}
                       >
-                        {menus.map((menu, index) => (
-                          <div className="order-none" key={index}>
-                            <div className="header-required no-top">
-                              Content Rating
-                            </div>
-                            <div
-                              className="md-select focus:outline-none"
-                              onClick={() => handleToggleMenu(menu.name)}
-                            >
-                              <div className="md-select-inner-wrap rounded cursor-pointer block">
-                                <div className="flex-grow relative py-[0.3125rem]">
-                                  <div className="mb-1 text-xs h-4"></div>
-
-                                  <div
-                                    className="placeholder-text opacity-40 with-label font-15"
-                                    style={{ minHeight: "1em" }}
-                                  >
-                                    {selectedOptions[menu.name]
-                                      ? selectedOptions[menu.name]
-                                      : menu.placeholder}
-                                  </div>
-                                </div>
-                                <IoIosArrowDown className="feather feather-chevron-down icon text-icon-contrast text-undefined chevron ml-1 flex-shrink-0 my-4" />
-                              </div>
-                              {openMenu && openMenu[menu.name] && (
-                                <div
-                                  className="overflow-x-hidden overscroll-contain z-10 bg-accent shadow rounded-b absolute z-[3]"
-                                  style={{
-                                    width: "100%",
-                                    display: openMenu[menu.name] ? "" : "none",
-                                  }}
-                                >
-                                  {menu.options.map((option, index) => (
-                                    <div
-                                      className="px-4 py-2 hover:bg-accent-10 active:bg-accent-10 cursor-pointer font-15"
-                                      key={index}
-                                      onClick={() =>
-                                        handleSelectOption(menu.name, option)
-                                      }
-                                    >
-                                      {option}
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                            
+                        <div className="order-none">
+                          <div className="header-required no-top">
+                            Content Rating
                           </div>
-                        ))}
-
+                          <div
+                            className="md-select-inner-wrap rounded cursor-pointer block"
+                            style={{ height: "58px" }}
+                          >
+                            <div
+                              className="relative w-full md-select-inner"
+                              tabIndex="0"
+                              onClick={() => handleToggleMenu("contentRating")}
+                            >
+                              <div className="md-select flex items-center relative">
+                                <div className="absolute top-4 transition-label with-placeholder font-15">
+                                  {selectedOptions.contentRating || (
+                                    <div className="md-select-placeholder">
+                                      Select a Content Rating
+                                    </div>
+                                  )}
+                                </div>
+                                <div
+                                  className="absolute right-0 flex items-center justify-center h-full top-0"
+                                  style={{ top: "30px" }}
+                                >
+                                  <IoIosArrowDown
+                                    className={`transform transition-transform ${
+                                      openMenu.contentRating ? "rotate-180" : ""
+                                    }`}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            {openMenu.contentRating && (
+                              <div className="absolute w-full z-[3] bg-accent border border-primary rounded left-0 mt-3">
+                                {tags.contentRating.map((option) => (
+                                  <div
+                                    key={option}
+                                    className="px-4 py-2 hover:bg-accent-10 active:bg-accent-10 cursor-pointer font-15"
+                                    onClick={() =>
+                                      handleSelectOption(
+                                        "contentRating",
+                                        option
+                                      )
+                                    }
+                                  >
+                                    {option}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="order-none">
+                          <div className="header-required no-top">Status</div>
+                          <div
+                            className="md-select-inner-wrap rounded cursor-pointer block"
+                            style={{ height: "58px" }}
+                          >
+                            <div
+                              className="relative w-full md-select-inner"
+                              tabIndex="0"
+                              onClick={() => handleToggleMenu("status")}
+                            >
+                              <div className="md-select flex items-center relative">
+                                <div className="absolute top-4 transition-label with-placeholder font-15">
+                                  {selectedOptions.status || (
+                                    <div className="md-select-placeholder ">
+                                      Select a Status
+                                    </div>
+                                  )}
+                                </div>
+                                <div
+                                  className="absolute right-0 flex items-center justify-center h-full top-0"
+                                  style={{ top: "30px" }}
+                                >
+                                  <IoIosArrowDown
+                                    className={`transform transition-transform ${
+                                      openMenu.status ? "rotate-180" : ""
+                                    }`}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            {openMenu.status && (
+                              <div className="absolute w-full z-[3] bg-accent border border-primary rounded left-0 mt-3">
+                                {tags.status.map((option) => (
+                                  <div
+                                    key={option}
+                                    className="px-4 py-2 hover:bg-accent-10 active:bg-accent-10 cursor-pointer font-15"
+                                    onClick={() =>
+                                      handleSelectOption("status", option)
+                                    }
+                                  >
+                                    {option}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
                         <div className="order-none">
                           <div className="header no-top">Publication Year</div>
                           <div className="md-select focus:outline-none">
@@ -374,12 +433,18 @@ export default function Uploadmanga() {
                         <div className="mt-2">
                           <div className="flex flex-wrap gap-2">
                             {tags.format.map((format, index) => (
-                              <span className="chip flex items-center" key={index}>
+                              <span
+                                className={`chip flex items-center ${
+                                  selectedTags.format.includes(format)
+                                    ? "include"
+                                    : ""
+                                }`}
+                                key={index}
+                                onClick={() => handleTagClick("format", format)}
+                              >
                                 {format}
                               </span>
                             ))}
-
-
                           </div>
                         </div>
                         <div className="header">Genre</div>
@@ -387,8 +452,13 @@ export default function Uploadmanga() {
                           <div className="flex flex-wrap gap-2">
                             {tags.genre.map((genre, index) => (
                               <span
-                                className="chip flex items-center"
+                                className={`chip flex items-center ${
+                                  selectedTags.genre.includes(genre)
+                                    ? "include"
+                                    : ""
+                                }`}
                                 key={index}
+                                onClick={() => handleTagClick("genre", genre)}
                               >
                                 {genre}
                               </span>
@@ -400,8 +470,12 @@ export default function Uploadmanga() {
                           <div className="flex flex-wrap gap-2">
                             {tags.theme.map((theme, index) => (
                               <span
-                                className="chip flex items-center"
+                              className={`chip flex items-center ${
+                                selectedTags.theme.includes(theme) ? "include" : ""
+                              }`}
                                 key={index}
+                                onClick={() => handleTagClick("theme", theme)}
+
                               >
                                 {theme}
                               </span>
