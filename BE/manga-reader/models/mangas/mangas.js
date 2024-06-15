@@ -10,12 +10,12 @@ const mangaSchema = new mongoose.Schema({
         required: true
     },
     author: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: String,
         ref: Collections.AUTHOR,
         required: true
     },
     artist: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: String,
         ref: Collections.ARTIST,
         required: true
     },
@@ -48,6 +48,10 @@ const mangaSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     images: {
         type: [String],
         required: true,
@@ -57,6 +61,10 @@ const mangaSchema = new mongoose.Schema({
         ref: Collections.USERS,
         required: true,
     },
+    chapters: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Collections.CHAPTERS
+    }]
 
 }, {
     timestamps: true

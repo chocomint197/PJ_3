@@ -5,6 +5,8 @@ import UserModel from "../../models/users/users.js";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import tagsEnum from "../../models/mangas/tagsEnum.js";
+import mongoose, { isValidObjectId } from "mongoose";
+import Collections from "../../database/collection.js";
 cloudinary.config({
   cloud_name: "dgcsigpq8",
   api_key: "138189825145128",
@@ -16,14 +18,27 @@ const upload = multer({ storage: storage });
 const mangaController = {
   createManga: async (req, res) => {
     try {
-      const { title, author, artist, format, genre, theme,contentRating, status, publicDate } = req.body;
-      const formatArr = JSON.parse(format)
-      const genreArr = JSON.parse(genre)
-      const themeArr = JSON.parse(theme)
+      const {
+        title,
+        author,
+        artist,
+        format,
+        genre,
+        theme,
+        contentRating,
+        status,
+        publicDate,
+        description,
+      } = req.body;
 
+      const formatArr = Array.isArray(format) ? format : JSON.parse(format);
+      const genreArr = Array.isArray(genre) ? genre : JSON.parse(genre);
+      const themeArr = Array.isArray(theme) ? theme : JSON.parse(theme);
       const uploaderId = req.user.userId;
+      const findTitle = await MangaModel.findOne({ title: title });
+      if (findTitle) throw new Error("Manga already existed");
       let uploadedImageUrl = null;
-      console.log(req.files)
+
       if (req.file) {
         const result = await new Promise((resolve, reject) => {
           const uploadStream = cloudinary.uploader.upload_stream(
@@ -40,9 +55,7 @@ const mangaController = {
           uploadStream.end(req.file.buffer);
         });
         uploadedImageUrl = result.secure_url;
-        console.log("Uploaded Image URL:", uploadedImageUrl);
       }
-      console.log(req.files)
       const lowerCaseAuthor = author.toLowerCase();
       const lowerCaseArtist = artist.toLowerCase();
       let findAuthor = await AuthorModel.findOne({ name: lowerCaseAuthor });
@@ -61,11 +74,11 @@ const mangaController = {
           findArtist = await ArtistModel.create({ name: lowerCaseArtist });
         }
       }
-      
+
       const newManga = new MangaModel({
         title,
-        author: findAuthor._id,
-        artist: findArtist._id,
+        author: findAuthor,
+        artist: findArtist,
         format: formatArr,
         genre: genreArr,
         theme: themeArr,
@@ -74,10 +87,19 @@ const mangaController = {
         publicDate: publicDate,
         images: [uploadedImageUrl],
         uploader: uploaderId,
-
+        description: description,
       });
-   
+
       await newManga.save();
+      await UserModel.findByIdAndUpdate(
+        uploaderId,
+        {
+          $push: {
+            uploadedItems: { item: newManga._id, itemType: Collections.MANGAS },
+          },
+        },
+        { new: true }
+      );
       findAuthor.mangas.push(newManga._id);
       findArtist.mangas.push(newManga._id);
       await findAuthor.save();
@@ -89,7 +111,6 @@ const mangaController = {
         message: "Manga upload success",
         success: true,
       });
-    
     } catch (error) {
       res.status(500).send({
         data: null,
@@ -102,8 +123,26 @@ const mangaController = {
   mangaInfo: async (req, res) => {
     try {
       const { id } = req.params;
-      const manga = await MangaModel.findById(id);
+      let manga = await MangaModel.findById(id);
       if (!manga) throw new Error("Manga not exists");
+      if (typeof manga.artist === "string") {
+        manga = await MangaModel.findById(id)
+          .populate("author")
+          .populate("chapters")
+          .populate("uploader")
+          .lean()
+          .exec();
+        manga.artist = undefined;
+      } else {
+        manga = await MangaModel.findById(id)
+          .populate('author')
+          .populate('artist')
+          .populate('chapters')
+          .populate('uploader')
+          .lean()
+          .exec();
+      }
+
       res.status(201).send({
         data: manga,
         message: "Get manga info success",
@@ -120,9 +159,16 @@ const mangaController = {
   },
   getAllMangas: async (req, res) => {
     try {
-      const mangas = await MangaModel.find();
+      const mangas = await MangaModel.find().populate("uploader").populate('chapters');
+      const formattedMangas = mangas.map((manga) => ({
+        ...manga.toObject(),
+        uploader: {
+          id: manga.uploader._id,
+          userName: manga.uploader.userName,
+        },
+      }));
       res.status(200).json({
-        data: mangas,
+        data: formattedMangas,
         message: "List mangas",
         success: true,
       });
@@ -135,16 +181,43 @@ const mangaController = {
       });
     }
   },
-  mangaTags: async(req,res) => {
+  mangaTags: async (req, res) => {
     try {
-        res.status(200).json({
-            tagsEnum
-        })
+      res.status(200).json({
+        tagsEnum,
+      });
     } catch (error) {
-        console.log(error)
-        res.status(500).json({error: 'Internal Server Error'})
+      console.log(error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
+  searchManga: async(req,res) => {
+    try {
+      const { title } = req.query;
+      const regex = new RegExp(title, "i");
+      const mangas = await MangaModel.find({ title: regex });
+      const formattedMangas = mangas.map((manga) => ({
+        ...manga.toObject(),
+        uploader: {
+          id: manga.uploader._id,
+          userName: manga.uploader.userName,
+        },
+      }));
+      res.status(200).json({
+        formattedMangas,
+        message: "Search mangas by title",
+        success: true,
+      });
+    } catch (error) {
+      res.status(500).json({
+        data: null,
+        message: "Error",
+        success: false,
+        error: error.message,
+      });
+    }
+  },
 };
+
 
 export default mangaController;

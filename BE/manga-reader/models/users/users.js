@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     item: {
         type:mongoose.Schema.Types.ObjectId,
         required: true,
-        refPath: 'uploadedItems.itemType'
+        refPath: 'uploadedItems.itemType'                           
     },
     itemType: {
         type: String,
@@ -52,15 +52,7 @@ userSchema.methods.updateRoles = async function() {
         }
     }
 
-    // const mangaCount = await mongoose.model(Collections.MANGAS).countDocuments({ uploader: this._id });
-    // const chapterCount = await mongoose.model(Collections.CHAPTERS).countDocuments({ uploader: this._id });
-
-    // if (mangaCount > 0 || chapterCount > 0) {
-    //     roles.push('Uploader');
-    // }
-
-    // this.role = roles;
-    // await this.save();
+   
 };
 const UserModel = mongoose.model(Collections.USERS, userSchema);
 export default UserModel;

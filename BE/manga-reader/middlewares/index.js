@@ -134,6 +134,27 @@ const middlewares = {
             }
             next();
         })
+    },
+    uploadMultipleImages: (req,res,next) => {
+        upload.array('file')(req, res, (err) => {
+            if (err instanceof multer.MulterError) {
+                console.error('Multer error:', err);
+                return res.status(400).send({
+                    message: 'Upload image failed due to Multer error',
+                    error: err.message,
+                    success: false
+                });
+            } else if (err) {
+                console.error('Unknown error:', err);
+                return res.status(400).send({
+                    message: 'Upload image failed due to unknown error',
+                    error: err.message,
+                    success: false
+                });
+            }
+            // Everything went fine.
+            next();
+        });
     }
 };
 
