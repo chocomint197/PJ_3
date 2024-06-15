@@ -50,6 +50,8 @@ input::-webkit-inner-spin-button {
   --main-color: rgb(79 79 79 / 1);
   --drawer-profile-width: 320px;
   --drawer-profile-min-width: 256px;
+  --button-size:24px;
+  --header-padding: 0px;
 }
 
 button,
@@ -2115,5 +2117,281 @@ menu,ol,ul {
 
 .none {
   display: none;
+}
+
+.manga-card.dense.overview {
+  grid-template-areas:
+        "art title"
+        "art author"
+        "art status";
+    grid-template-columns: 64px 1fr;
+}
+
+.manga-card.dense {
+  grid-template-rows: auto auto 1fr;
+    height: unset;
+}
+
+.author {
+  grid-area: author;
+  height: 1.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: none;
+}
+
+.manga-card.dense .author {
+  display: block
+}
+
+.md-flex-row {
+  flex-direction: row;
+}
+
+.manga-card.dense .title {
+height: 1.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.manga-card-cover .aspect {
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 142.307692%;
+  position: relative;
+}
+
+.bg-dark {
+  background-color: rgb(25,26,28)
+}
+
+.page-multi {
+  align-items: center;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    height: 184px;
+    justify-content: center;
+    position: relative;
+    transition: all .15s ease-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: 130px;
+}
+
+.page-multi.placeholder {
+  border: 1px dashed #4d4d4d;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
+.p-3 {
+  padding-right: .75rem;
+}
+
+.close-page-multi {
+    position: absolute;
+    right: calc(var(--button-size) / -3);
+    top: calc(var(--button-size) / -3);
+    background-color: rgb(var(--md-background));
+    border-radius: 100%;
+    text-align: center;
+}
+
+.md--reader-wrap {
+  display: grid;
+  grid-template-areas: "chapter comments menu";
+  grid-template-columns: auto min-content min-content;
+  height: 100%;
+  margin: 0 !important;
+  min-height: 100vh;
+  overflow-x: clip;
+  padding: 0 !important;
+  width: 100%;
+  --header-padding: 0px;
+}
+.md--reader-chapter {
+  display: grid;
+  grid-template-rows: min-content auto min-content min-content;
+    height: 100%;
+    grid-template-areas:
+    "header"
+    "pages"
+    "progress"
+    "next";
+
+}
+
+.md--reader-header {
+  grid-area: header;
+}
+
+.reader--header {
+  border-bottom: 1px solid rgb(var(--md-accent));
+    padding: 1rem;
+    position: relative;
+}
+.reader--header-title {
+  text-align: left;
+  font-size: 1.125rem;
+    line-height: 1.75rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.reader--header-manga {
+  display: inline;
+    text-align: left;
+    color: rgb(var(--md-primary));
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.reader--header-meta {
+  column-gap: .5rem;
+    display: grid;
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+    grid-template-columns: repeat(2, 4fr);
+}
+
+.reader--meta {
+  align-items: center;
+  background-color: rgb(var(--md-accent));
+  border-radius: .125rem;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  padding: .125rem .25rem;
+  white-space: nowrap;
+}
+
+
+.md--reader-pages {
+  grid-area: pages;
+  width: 100%;
+}
+
+.page-wrap.ls {
+  --header-padding: 0px;
+  min-height: calc(100dvh - var(--header-padding) - 3rem);
+}
+
+.md--page {
+  border-color: transparent;
+    box-shadow: none;
+    box-sizing: border-box;
+    display: flex;
+    outline-style: none;
+    position: relative;
+}
+
+
+
+.img.limit-height {
+  max-height: var(--max-height);
+    min-height: 0;
+}
+
+.img.ls {
+  margin-left: auto;
+  margin-right: auto;
+}
+.img {
+  height: unset;
+    max-width: unset;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    word-break: break-all;
+    --max-height: calc(100vh - var(--header-padding));
+    margin-bottom: auto;
+    margin-top: auto;
+}
+
+.pagination {
+  position: relative;
+  z-index: 5;
+}
+
+.pagination ul {
+  display:flex;
+}
+
+.pagination ul li {
+  margin: 10px;
+  font-size: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  cursor: pointer;
+
+}
+
+.pagination ul li:hover {
+  background-color: #fff;
+}
+
+.pagination ul li:hover > a {
+  color: #000;
+}
+
+.pagination ul .active {
+  background-color: rgb(196,83,54);
+  
+}
+
+.grid-cols-12 {
+  grid-template-columns: 1fr 12rem;
+}
+
+.expander {
+  transition: grid-template-rows .15s ease;
+}
+
+.grid-rows-2 {
+  grid-template-rows: 1fr 0fr;
+}
+
+.text-base {
+  font-size: 1rem;
+        line-height: 1.5rem;
+    }
+.text-midTone {
+  color: rgb(140 140 140);
+}
+
+.space-y-1>:not([hidden])~:not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-bottom: calc(.25rem* var(--tw-space-y-reverse));
+  margin-top: calc(.25rem*(1 - var(--tw-space-y-reverse)));
+}
+
+.transition-\[background-color\,outline-color\] {
+  transition-duration: .15s;
+  transition-property: background-color, outline-color;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+.w-5 {
+  width: 1.25rem;
+}
+
+.h-5 {
+  height: 1.25rem;
+}
+
+.tag.lift {
+  justify-content: center;
+  display:flex;
 }
 

@@ -19,6 +19,9 @@ import Groupmembers from './Components/Group/Group profile/Groupmembers.jsx';
 import Uploadmanga from './Components/Upload/Uploadmanga.jsx';
 import UserList from './Components/Users/UserList.jsx';
 import CreateGroup from './Components/Group/CreateGroup.jsx';
+import ChapterUpload from './Components/Upload/ChapterUpload.jsx';
+import Chapter from './Components/Detail/Chapter.jsx';
+import Searchpage from './Components/Homepage/Searchpage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -72,6 +75,18 @@ const router = createBrowserRouter([
   {
     path: '/create/title',
     element: <Uploadmanga/>
+  },
+  {
+    path: '/title/upload/:id',
+    element: <ChapterUpload/>
+  },
+  {
+    path: '/title/:mangaId/chapter/:chapterId',
+    element: <Chapter/>
+  },
+  {
+    path :'/titles',
+    element: <Searchpage/>
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

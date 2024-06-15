@@ -13,7 +13,7 @@ export default function UserList() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:1050/api/v1/users/lists"
+        "https://pj-3-ug2p.onrender.com/api/v1/users/lists"
       );
       setUsers(response.data.data);
     } catch (error) {

@@ -17,13 +17,10 @@ export default function Navbar() {
     const path = location.pathname;
 
     if (path === "/") setSelectedSection('Home');
-    else if (path.startsWith("/titles/feed")) setSelectedSection('Update');
     else if (path.startsWith("/titles/follows")) setSelectedSection('Library');
     else if (path.startsWith("/my/groups")) setSelectedSection('My Groups');
     else if (path.startsWith("/my/history")) setSelectedSection('Reading History');
-    else if (path.startsWith("/titles")) setSelectedSection('Advenced Search');
-    else if (path.startsWith("/titles/recent")) setSelectedSection('Recently Added');
-    else if (path.startsWith("/titles/latest")) setSelectedSection('Latest Update');
+    else if (path.startsWith("/titles")) setSelectedSection('Search');
     else if (path.startsWith("/titles/random")) setSelectedSection('Random');
     else if (path.startsWith("/groups")) setSelectedSection('Groups');
     else if (path.startsWith("/user/list")) setSelectedSection('Users');
@@ -83,11 +80,6 @@ export default function Navbar() {
               </div>
               <div className="mx-2 font-bold" >Follows</div>
             </div>
-            <NavLink to={"/titles/feed"}  className="flex-shrink-0">
-                <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Update' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Update')}>
-                    <div className="mx-2">Update</div>
-                </div>
-            </NavLink>
             <NavLink to={"/titles/follows" } className="flex-shrink-0">
             <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Library' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Library')}>
                     <div className="mx-2">Library</div>
@@ -133,18 +125,8 @@ export default function Navbar() {
               )}
          
             <NavLink to={"/titles"}  className="flex-shrink-0">
-                <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Advenced Search' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Advenced Search')}>
-                    <div className="mx-2">Advenced Search</div>
-                </div>
-            </NavLink>
-            <NavLink to={"/titles/recent"}  className="flex-shrink-0">
-                <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Recently Added' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Recently Added')}>
-                    <div className="mx-2">Recently Added</div>
-                </div>
-            </NavLink>
-            <NavLink to={"/titles/latest"}  className="flex-shrink-0">
-                <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Latest Update' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Latest Update')}>
-                    <div className="mx-2">Latest Updates</div>
+                <div className={`list__item px-2 menu__item--hover-hightlight ${selectedSection === 'Search' ? 'menu__item--active' : ''}`} onClick={() => handleItemClick('Advenced Search')}>
+                    <div className="mx-2">Search</div>
                 </div>
             </NavLink>
             <NavLink to={"/titles/random"}  className="flex-shrink-0">

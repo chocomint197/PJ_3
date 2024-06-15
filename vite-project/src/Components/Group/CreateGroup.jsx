@@ -23,7 +23,7 @@ export default function CreateGroup() {
     try {
  
       const response = await axiosInstance.post(
-        "http://localhost:1050/api/v1/group/create",
+        "https://pj-3-ug2p.onrender.com/api/v1/group/create",
         { groupName, groupDescription },
       );
       alert("Group created successfully:", response.data);

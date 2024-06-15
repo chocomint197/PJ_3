@@ -26,6 +26,7 @@ const axiosInstance = axios.create({
         try {
             const response = await axiosInstance.get(`https://pj-3-ug2p.onrender.com/api/v1/users/profile/${id}`)
             setUser(response.data)
+            console.log(response.data)
         } catch (error) {
             console.log('Error fetching', error)
         }
@@ -87,7 +88,7 @@ const axiosInstance = axios.create({
                             <dt className="mb-2 font-bold">Uploads</dt>
                             
 
-                            <div className="grid gap-y-2" style={{fontSize:"15px"}}>{user.data.uploads}</div>
+                            <div className="grid gap-y-2" style={{fontSize:"15px"}}>{user.data.uploadedItems.length}</div>
                         </div>
                     </div>
                 </div>

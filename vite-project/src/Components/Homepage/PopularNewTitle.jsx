@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../App.css";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay  } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -6,12 +6,24 @@ import { GrFormPrevious, GrFormNext  } from "react-icons/gr";
 
 import "swiper/swiper-bundle.css";
 import { NavLink } from "react-router-dom";
-import bookData from "../../data";
-
+import axios from 'axios'
 export default function PopularNewTitle() {
   const onSwiperInit = (swiper) => {
     swiper.wrapperEl.style.maxWidth = '1664px';
   }; 
+  const [newPopular, setNewPopular] = useState(null)
+  useEffect(() => {
+    const fetchNewPopular = async () => {
+        try {
+            const response = await axios.get(`https://pj-3-ug2p.onrender.com/api/v1/`)
+            setNewPopular(response.data.data)
+        } catch (error) {
+            console.log('Error fetching', error)
+        }
+    };
+    fetchNewPopular()
+  },[]);
+
    return (
     <div className="relative fixed p-0 m-0 top-16 left-0 w-full" style={{top: "0rem"}}>
       <div className="absolute top-16 left-0 w-full z-[5]">
@@ -38,35 +50,35 @@ export default function PopularNewTitle() {
                     onSwiper={onSwiperInit}
           loop={true}
         >
-               {bookData.map((book, index) => (
+               {newPopular && newPopular.slice(0,8).map((manga, index) => (
                 
           <SwiperSlide  style={{width: "1664px"}} key={index}>
             <NavLink
-              to={`/title/${book.id}`}
+              to={`/title/${manga._id}`}
               style={{ height: "440px" }}
               className="flex relative h-full overflow-hidden shadow banner-bg"
             >
-                <img src={book.img} alt="Cover" className="absolute left-0 top-0 w-[100%] h-[150%] object-cover select-none " style={{objectPosition: "0px 30%"}}/>
+                <img src={manga.images} alt="Cover" className="absolute left-0 top-0 w-[100%] h-[150%] object-cover select-none " style={{objectPosition: "0px 30%"}}/>
                 <div className="absolute banner-bg inset-0"></div>
                 <div className="p-4 py-4 px-4 grid-rows-1 grid gap-2 w-full mx-auto mt-auto container-swiper max-w-[1440px]" style={{height: "77%"}}>
                     <div className="h-full relative z-20 flex gap-4">
                         <NavLink className="h-full flex item-start relative mb-auto select-none w-full w-auto object-top object-cover rounded shadow-lg bg-transparent" style={{ aspectRatio: 7 / 10}}> 
-                        <img src={book.img} alt="" className="shadow-md rounded w-full h-full" />
+                        <img src={manga.images} alt="" className="shadow-md rounded w-full h-full" />
                         </NavLink>
                         <div className="mt-auto grid gap-2 h-full" style={{minHeight: "0px", gridTemplateRows: "max-content min-content auto max-content"}}>
-                            <h2 className="font-bold text-4xl line-clamp-2 overflow-hidden" style={{lineHeight: "2.75rem"}}>{book.name}</h2>
+                            <h2 className="font-bold text-4xl line-clamp-2 overflow-hidden" style={{lineHeight: "2.75rem"}}>{manga.title}</h2>
                             <div className="flex flex-wrap gap-1 select-none overflow-hidden">
-                                {book.categories.map((category, i) => (
-                                    <span key={i} className="tag bg-accent">{category}</span>
+                                {manga.genre.map((genre, i) => (
+                                    <span key={i} className="tag bg-accent">{genre}</span>
                                 ))}
                             </div>
                             <div className="preview-description">
                                 <div className="py-2 relative overflow-hidden py-0">
-                                    <p>{book.description}</p>
+                                    <p>{manga.description}</p>
                                 </div>
                             </div>
                             <div className="truncate mr-36">
-                                <span className="font-medium italic">{book.uploader}</span>
+                                <span className="font-medium italic">{manga.uploader.userName}</span>
                             </div>
                         </div>
                     </div>

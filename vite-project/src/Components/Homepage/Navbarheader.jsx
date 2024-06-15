@@ -4,13 +4,14 @@ import "../../App.css";
 import { FaRegUser, FaUser } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Navbarheader() {
   const loginCheck = localStorage.getItem("token");
   const id = localStorage.getItem("userInfo");
   const [user, setUser] = useState(null);
   const [modalDisplay, setModalDisplay] = useState(false);
+  const navigate = useNavigate()
   const modalRef = useRef(null);
 
   const axiosInstance = axios.create({
@@ -51,7 +52,8 @@ export default function Navbarheader() {
     localStorage.removeItem("token");
     localStorage.removeItem("userInfo");
     alert('Sign out success');
-    window.location.reload();
+    window.location.reload()
+    navigate('/')
 
   };
 

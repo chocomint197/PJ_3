@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../App.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Navbar from "../Homepage/Navbar";
 import Navbarheader from "../Homepage/Navbarheader";
 import { IoSearch } from "react-icons/io5";
@@ -80,16 +80,20 @@ export default function Uploadmanga() {
   }, [openMenu]);
 
   const [upload, setUpload] = useState(null);
-
+  const [file, setFile] = useState(null)
+  
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
+
     if (file) {
       setUpload(URL.createObjectURL(file));
+      setFile(file)
     }
   };
   const handleResetUpload = () => {
     if (upload) {
       URL.revokeObjectURL(upload);
+      setFile(null)
       setUpload(null);
     }
   };
@@ -110,6 +114,53 @@ export default function Uploadmanga() {
       return newSelectedTags;
     });
   };
+
+
+    //form data
+    const [title, setTitle] = useState("");
+    const [author, setAuthor] = useState("");
+    const [artist, setArtist] = useState("");
+    const [publicationYear, setPublicationYear] = useState("");
+    const [description, setDescription] = useState("")
+    const navigate = useNavigate();
+  const token = localStorage.getItem('token')
+
+    const postNewManga = async () => {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description)
+      formData.append("author", author);
+      formData.append("artist", artist);
+      formData.append("contentRating", selectedOptions.contentRating);
+      formData.append("status", selectedOptions.status);
+      formData.append("publicDate", publicationYear);
+      formData.append("format", JSON.stringify(selectedTags.format));
+      formData.append("genre", JSON.stringify(selectedTags.genre));
+      formData.append("theme", JSON.stringify(selectedTags.theme))
+      
+      if (file) {
+        formData.append("images", file);
+      }
+  
+      try {
+        const response = await axios.post(
+          "http://localhost:1050/api/v1/title/create",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              'authorization': `Bearer ${token}`
+            },
+          }
+        );
+        alert('Manga uploaded successful')
+        navigate('/')
+      } catch (error) {
+        console.error("Error uploading manga", error);
+      }
+    };
+
+
   return (
     <div className="flex flex-grow text-color">
       <Navbar />
@@ -224,6 +275,34 @@ export default function Uploadmanga() {
                                     <input
                                       type="text"
                                       className="inline-input text-color"
+                                      
+                                      value={title}
+                                      onChange={(e) => setTitle(e.target.value)}
+                                      placeholder="Manga title"
+                                    />
+                                    <div className="absolute top-0 opacity-60 pointer-events-none pl-1 width-full line-clamp-1 break-all"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="label mt-6">
+                          <div className="required">Description</div>
+                        </div>
+                        <div>
+                          <div className="grid grid-cols-1 gap-2">
+                            <div>
+                              <div>
+                                <div className="text-item-container">
+                                  <div className="relative flex-grow min-w-0 ">
+                                    <input
+                                      type="text"
+                                      className="inline-input text-color"
+                                      
+                                      value={description}
+                                      onChange={(e) => setDescription(e.target.value)}
+                                      placeholder="Description"
                                     />
                                     <div className="absolute top-0 opacity-60 pointer-events-none pl-1 width-full line-clamp-1 break-all"></div>
                                   </div>
@@ -257,6 +336,9 @@ export default function Uploadmanga() {
                               type="text"
                               placeholder="Author name"
                               className="text-color"
+                              value={author}
+                              onChange={(e) => setAuthor(e.target.value)}
+                              
                             />
                             <div className="md-border"></div>
                           </form>
@@ -283,6 +365,8 @@ export default function Uploadmanga() {
                               type="text"
                               placeholder="Artist name"
                               className="text-color"
+                              value={artist}
+                              onChange={(e) => setArtist(e.target.value)}
                             />
                             <div className="md-border"></div>
                           </form>
@@ -410,6 +494,9 @@ export default function Uploadmanga() {
                                 <input
                                   name="publicDate"
                                   type="number"
+                                  value={publicationYear}
+                                  onChange={(e) => setPublicationYear(e.target.value)}
+
                                   className="placeholder-current p-4 text-color"
                                   placeholder="Publication Year"
                                   style={{ padding: "1rem", height: "58px" }}
@@ -565,6 +652,7 @@ export default function Uploadmanga() {
                       <button
                         className="rounded custom-opacity relative md-btn flex items-center px-3 overflow-hidden accent primary"
                         style={{ minHeight: "3rem", minWidth: "13.75rem" }}
+                        onClick={postNewManga}
                       >
                         <span className="flex relative items-center justify-center font-medium select-none w-full pointer-events-none">
                           Save
